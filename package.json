@@ -1,0 +1,43 @@
+{
+  "name": "oss-name-check",
+  "version": "0.1.0",
+  "description": "OpenSource software name checker",
+  "keywords": [
+    "name",
+    "check",
+    "name-check",
+    "name-checker",
+    "opensource",
+    "software",
+    "project",
+    "repository"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "homepage": "https://github.com/vladimyr/oss-name-check",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vladimyr/oss-name-check.git"
+  },
+  "author": {
+    "email": "d.vladimyr@gmail.com",
+    "name": "Dario Vladovic",
+    "url": "github.com/vladimyr"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "request": "^2.72.0"
+  },
+  "devDependencies": {
+    "debug": "^2.2.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-buble": "^0.5.1",
+    "gulp-debug": "^2.1.2",
+    "gulp-if": "^2.0.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "minimist": "^1.2.0"
+  }
+}

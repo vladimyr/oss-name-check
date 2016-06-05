@@ -1,0 +1,10 @@
+# deps
+node_modules
+
+# editors
+.idea
+*.sublime-*
+
+# build output
+dist/*
+!dist/.gitkeep
