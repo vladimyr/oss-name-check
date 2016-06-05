@@ -12,6 +12,7 @@
     "project",
     "repository"
   ],
+  "main": "./dist/check-name.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
