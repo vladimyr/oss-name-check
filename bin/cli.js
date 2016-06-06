@@ -57,8 +57,11 @@ var argv = yargs.version(ver)
   .argv;
 
 var name = argv._[0];
+var options = {
+  gitlabToken: process.env.GITLAB_TOKEN
+};
 
-isNameAvailable(name)
+isNameAvailable(name, options)
   .then(function complete(results) {
     if (argv.json) {
       var data = {
