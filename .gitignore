@@ -6,5 +6,5 @@ node_modules
 *.sublime-*
 
 # build output
-dist/*
+#dist/*
 !dist/.gitkeep
