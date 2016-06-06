@@ -6,4 +6,4 @@
 .npmignore
 gulpfile.*
 
-example
+src
