@@ -1,5 +1,7 @@
 'use strict';
 
+var ref = require('./helpers.js');
+var format = ref.format;
 var Promise = require('bluebird');
 var providers = require('./providers/');
 var debug = require('debug')('runner');
@@ -17,7 +19,12 @@ function isNameAvailable(name, options, callback) {
     var provider = ref.name;
 
     return query(name, options)
-      .then(function (result) { result.success = true; return result; })
+      .then(function (result) {
+        result.success = true;
+        result.provider = provider;
+        debug((provider + ": Name \"" + name + "\" is " + (format(result.available, 'available'))));
+        return result;
+      })
       .error(function (err) { return ({ success: false, error: err, provider: provider }); });
   }).asCallback(callback);
 }

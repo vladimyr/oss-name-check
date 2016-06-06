@@ -4,7 +4,7 @@ const provider = 'github';
 const baseUrl = 'https://api.github.com';
 const debug = require('debug')(`provider.${ provider }`);
 
-const { apiRequest, format } = require('../helpers.js');
+const { apiRequest } = require('../helpers.js');
 const noop = Function.prototype;
 
 function query(name, options={}, callback=noop) {
@@ -16,13 +16,11 @@ function query(name, options={}, callback=noop) {
       repos = repos.filter(repo => repo.name === name);
       debug(`Found ${ repos.length } equally named repositories.`);
 
-      let result = { provider, available: repos.length === 0 };
+      let result = { available: repos.length === 0 };
       if (!result.available) {
         let { name, full_name:fullName, html_url:url } = repos[0];
         result.holder = { name, fullName, url };
       }
-
-      debug(`Name "${ name }" is ${ format(result.available, 'available') }`);
       return result;
     })
     .asCallback(callback);

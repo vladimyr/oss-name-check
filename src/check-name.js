@@ -1,5 +1,6 @@
 'use strict';
 
+const { format } = require('./helpers.js');
 const Promise = require('bluebird');
 const providers = require('./providers/');
 const debug = require('debug')('runner');
@@ -11,7 +12,12 @@ function isNameAvailable(name, options={}, callback=noop) {
 
   return Promise.map(providers, ({ query, name:provider }) => {
     return query(name, options)
-      .then((result) => { result.success = true; return result; })
+      .then((result) => {
+        result.success = true;
+        result.provider = provider;
+        debug(`${ provider }: Name "${ name }" is ${ format(result.available, 'available') }`);
+        return result;
+      })
       .error((err) => ({ success: false, error: err, provider }));
   }).asCallback(callback);
 }
