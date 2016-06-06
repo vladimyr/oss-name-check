@@ -12,7 +12,7 @@ function isNameAvailable(name, options={}, callback=noop) {
   return Promise.map(providers, ({ query, name:provider }) => {
     return query(name, options)
       .then((result) => { result.success = true; return result; })
-      .error((err) => ({ success: false, error: err }));
+      .error((err) => ({ success: false, error: err, provider }));
   }).asCallback(callback);
 }
 
