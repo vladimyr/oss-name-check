@@ -1,12 +1,12 @@
 'use strict';
 
-const { resolve:resolvePath } = require('path');
-const { readdirSync:readDir } = require('fs');
+const resolvePath = require('path').resolve;
+const readDir = require('fs').readdirSync;
 
 let providers = [];
 
 let path = resolvePath(__dirname);
-readDir(path).map((filename) => {
+readDir(path).map(filename => {
   if (filename === 'index.js') return;
 
   let filepath = resolvePath(__dirname, filename);

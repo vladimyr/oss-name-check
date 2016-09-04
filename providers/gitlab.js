@@ -4,26 +4,34 @@ const provider = 'gitlab';
 const baseUrl = 'https://gitlab.com/api/v3';
 const debug = require('debug')(`provider.${ provider }`);
 
-const { apiRequest } = require('../helpers.js');
+const apiRequest = require('../lib/helpers.js').apiRequest;
 const noop = Function.prototype;
 
-function query(name, options={}, callback=noop) {
+function query(name, options, callback) {
+  options = options || {};
+  callback = callback || noop;
+
   let url = `${ baseUrl }/projects/search/${ name }`;
   let headers = { 'PRIVATE-TOKEN': options.gitlabToken };
 
   return apiRequest(url, debug, { headers })
-    .then((repos) => {
+    .then(repos => {
       repos = repos.filter(repo => repo.path === name);
       debug(`Found ${ repos.length } equally named repositories.`);
 
       let result = { available: repos.length === 0 };
       if (!result.available) {
-        let { path:name, path_with_namespace:fullName, web_url:url } = repos[0];
-        result.holder = { name, fullName, url };
+        let repo = repos[0];
+        result.holder = {
+          name: repo.path,
+          fullName: repo.path_with_namespace,
+          url: repo.web_url
+        };
       }
+
       return result;
     })
     .asCallback(callback);
 }
 
-module.exports = { query, name: provider };
+module.exports = { query, provider };

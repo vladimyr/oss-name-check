@@ -4,6 +4,3 @@
 .git*
 .jshint*
 .npmignore
-gulpfile.*
-
-src

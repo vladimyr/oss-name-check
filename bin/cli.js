@@ -2,50 +2,15 @@
 
 'use strict';
 
-var yargs = require('yargs');
-var chalk = require('chalk');
-var figures = require('figures');
-var Table = require('cli-table');
-var format = require('util').format;
-var ver = require('../package.json').version;
+const yargs = require('yargs');
+const chalk = require('chalk');
+const figures = require('figures');
+const Table = require('cli-table');
+const pkg = require('../package.json');
 
-var isNameAvailable = require('../dist/check-name.js');
+const isNameAvailable = require('../check-name.js');
 
-function printJson(results) {
-  console.log(format('\n%s\n', JSON.stringify(results, null, 2)));
-}
-
-function printTable(name, results) {
-  var table = new Table({
-    head: [
-      chalk.bold.white('Service'),
-      chalk.bold.white('Available?')
-    ],
-    colAligns: [ 'left', 'middle' ]
-  });
-
-  function getAvailability(result) {
-    var indicator = chalk.yellow(figures.warning);
-    if (!result.success) return indicator;
-
-    if (result.available) {
-      indicator = chalk.green(figures.tick);
-    } else {
-      indicator = chalk.red(figures.cross);
-    }
-
-    return indicator;
-  }
-
-  results.forEach(function(result) {
-    table.push([ chalk.blue(result.provider), getAvailability(result) ]);
-  });
-
-  console.log('\nSearch query: %s', chalk.magenta(name));
-  console.log(format('%s\n', table.toString()));
-}
-
-var argv = yargs.version(ver)
+const argv = yargs.version(pkg.version)
   .usage('\n$0 [name]')
   .required(1, chalk.red('Name parameter is required!'))
   .option('j', {
@@ -56,21 +21,44 @@ var argv = yargs.version(ver)
   .help('h').alias('h', 'help')
   .argv;
 
-var name = argv._[0];
-var options = {
-  gitlabToken: process.env.GITLAB_TOKEN
-};
+let name = argv._[0];
+let options = { gitlabToken: process.env.GITLAB_TOKEN };
 
 isNameAvailable(name, options)
-  .then(function complete(results) {
+  .then(results => {
     if (argv.json) {
-      var data = {
-        searchQuery: name,
-        results: results
-      };
-      printJson(data);
-      return;
+      printJson(name, results);
+    } else {
+      printTable(name, results);
     }
-
-    printTable(name, results);
   });
+
+function printTable(name, results) {
+  let table = new Table({
+    head: [
+      chalk.bold.white('Service'),
+      chalk.bold.white('Available?')
+    ],
+    colAligns: [ 'left', 'middle' ]
+  });
+
+  results.forEach(result =>
+    table.push([ chalk.blue(result.provider), getIndicator(result) ]));
+
+  console.log('\nSearch query: %s', chalk.magenta(name));
+  console.log('%s\n', table.toString());
+
+  function getIndicator(result) {
+    if (!result.success) return chalk.yellow(figures.warning);
+    return result.available ? chalk.green(figures.tick)
+                            : chalk.red(figures.cross);
+  }
+}
+
+function printJson(name, results) {
+  let data = {
+    searchQuery: name,
+    results: results
+  };
+  console.log('\n%s\n', JSON.stringify(data, null, 2));
+}

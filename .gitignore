@@ -5,6 +5,3 @@ node_modules
 .idea
 *.sublime-*
 
-# build output
-#dist/*
-!dist/.gitkeep
